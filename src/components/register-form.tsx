@@ -40,7 +40,7 @@ const RegisterForm = () => {
       registerUser(data);
       toast.success('User has been registered successfully!');
       setTimeout(() => {
-        navigate('/boards');
+        navigate('/login');
       }, 1000);
     } catch (error: any) {
       if (error?.status >= 400 || error?.status < 500) {
@@ -141,7 +141,7 @@ const RegisterForm = () => {
           </div>
           <div className="form-control mt-6">
             <button
-              className={`btn btn-info ${loading && 'loading'}`}
+              className={`btn btn-primary ${loading && 'loading'}`}
               type="submit"
             >
               {loading ? '' : 'Register'}

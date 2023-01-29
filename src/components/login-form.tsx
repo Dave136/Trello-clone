@@ -92,7 +92,7 @@ const LoginForm = () => {
           </div>
           <div className="form-control mt-6">
             <button
-              className={`btn btn-info ${loading && 'loading'}`}
+              className={`btn btn-primary ${loading && 'loading'}`}
               type="submit"
             >
               {loading ? '' : 'Login'}

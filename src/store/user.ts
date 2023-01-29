@@ -15,6 +15,7 @@ interface UserState {
   login: (email: string, password: string) => void;
   findByEmail: (email: string) => User | undefined;
   clear: () => void;
+  logout: () => void;
 }
 
 const useUserStore = create<UserState>()(
@@ -50,6 +51,11 @@ const useUserStore = create<UserState>()(
         clear: () =>
           set((state) => ({
             users: [],
+            user: null,
+          })),
+        logout: () =>
+          set((state) => ({
+            user: null,
           })),
       }),
       {

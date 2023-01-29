@@ -1,18 +1,13 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 
-type Board = {
-  id: string;
-  title: string;
-  userId: string;
-};
-
 interface BoardState {
-  boards: Board[];
-  add: (board: Board) => void;
+  boards: IBoard[];
+  add: (board: IBoard) => void;
   remove: (id: string) => void;
-  update: (board: Board) => void;
-  getByUserId: (id: string) => Board[] | undefined;
+  update: (id: string, board: Partial<IBoard>) => void;
+  getById: (id: string) => IBoard | undefined;
+  getByUserId: (id: string) => IBoard[] | undefined;
   clear: () => void;
 }
 
@@ -29,12 +24,13 @@ const useBoardStore = create<BoardState>()(
           set({
             boards: get().boards.filter((board) => board.id !== id),
           }),
-        update: (board) =>
+        update: (id, board) =>
           set((state) => ({
             boards: state.boards.map((current) =>
-              current.id === board.id ? { ...board } : current
+              current.id === id ? { ...current, ...board } : current
             ),
           })),
+        getById: (id) => get().boards.find((board) => board.id === id),
         getByUserId: (id) =>
           get().boards.filter((board) => board.userId === id),
         clear: () =>
@@ -43,7 +39,7 @@ const useBoardStore = create<BoardState>()(
           })),
       }),
       {
-        name: 'user-storage',
+        name: 'board-storage',
       }
     )
   )
