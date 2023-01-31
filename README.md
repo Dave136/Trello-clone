@@ -2,7 +2,7 @@
 
 <div align="center">
   <h3>
-    <a href="#">
+    <a href="https://dg-trello-clone.netlify.app/">
       Demo
     </a>
     <span> | </span>
@@ -27,7 +27,7 @@
 
 The simple and minimalist trello clone app, built using react, dnd-kit and tailwindcss.
 
-You can see a [demo]()
+You can see a [demo](https://dg-trello-clone.netlify.app/)
 
 ### Built With
 
