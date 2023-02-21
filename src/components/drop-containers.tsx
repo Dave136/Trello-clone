@@ -192,6 +192,11 @@ export default function DropContainers({
     })
   );
 
+  const getParentName = (containerId: string) =>
+    Object.keys(items)[
+      Object.values(items).findIndex((item) => item.id === containerId)
+    ] || null;
+
   const findContainer = (id: string) => {
     if (Object.values(items).filter((item) => item.id === id).length) {
       return id;
@@ -271,13 +276,6 @@ export default function DropContainers({
 
         recentlyMovedToNewContainer.current = true;
 
-        const activeContainerIndex = Object.values(items).findIndex(
-          (item) => item.id === activeContainer
-        );
-        const overContainerIndex = Object.values(items).findIndex(
-          (item) => item.id === overContainer
-        );
-
         const activeContainerObject = Object.values(items).find(
           (item) => item.id === activeContainer
         );
@@ -286,15 +284,18 @@ export default function DropContainers({
           (item) => item.id === overContainer
         );
 
+        const activeParentName = getParentName(activeContainerObject!.id);
+        const overParentName = getParentName(overContainerObject!.id);
+
         const result = {
           ...items,
-          [activeContainerIndex]: {
+          [activeParentName as string]: {
             ...activeContainerObject,
             cards: activeContainerObject!.cards.filter(
               (item) => item.id !== active.id
             ),
           },
-          [overContainerIndex]: {
+          [overParentName as string]: {
             ...overContainerObject,
             cards: [
               ...overContainerObject!.cards.slice(0, newIndex),
