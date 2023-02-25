@@ -62,7 +62,6 @@ interface Props {
     isDragOverlay: boolean;
   }): React.CSSProperties;
   wrapperStyle?(args: { index: number }): React.CSSProperties;
-  itemCount?: number;
   items?: BoardItem[];
   handle?: boolean;
   renderItem?: any;
@@ -82,7 +81,6 @@ const empty: UniqueIdentifier[] = [];
 export default function DropContainers({
   id: parentId,
   adjustScale = false,
-  itemCount = 3,
   cancelDrop,
   columns,
   handle = false,
@@ -337,30 +335,31 @@ export default function DropContainers({
     const overContainer = findContainer(overId as string);
 
     if (overContainer) {
-      const activeIndex = Object.values(items)
-        .flatMap((item) => item.cards)
-        .findIndex((card) => card.id === active.id);
-      const overIndex = Object.values(items)
-        .flatMap((item) => item.cards)
-        .findIndex((card) => card.id === overId);
-      const overContainerIndex = Object.values(items).findIndex(
-        (item) => item.id === overContainer
+      const parentName = getParentName(activeContainer) as string;
+      const overName = getParentName(overContainer) as string;
+      const activeIndex = items[parentName].cards.findIndex(
+        (card) => card.id === active.id
       );
+      const overIndex = items[overName].cards.findIndex(
+        (card) => card.id === overId
+      );
+
       const overContainerObject = Object.values(items).find(
         (item) => item.id === overContainer
       );
+      const overParentName = getParentName(overContainerObject!.id) as string;
 
       if (activeIndex !== overIndex) {
         // @ts-ignore
         setItems((items) => {
           const result = {
             ...items,
-            [overContainerIndex]: {
-              ...overContainerObject,
+            [overParentName]: {
+              ...items[overParentName],
               cards: arrayMove(
-                overContainerObject!.cards,
-                activeIndex - 1,
-                overIndex - 1
+                items[overParentName].cards,
+                activeIndex,
+                overIndex
               ),
             },
           };
